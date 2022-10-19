@@ -38,6 +38,10 @@ static bool isEhome(const char *data, size_t len){
     if (len < 4) {
         return false;
     }
+    // 第三个字节为ehome设备的通道号
+    if (data[0] == 0x01 && data[1] == 0x00 && data[2] >= 0x01 && data[3] == 0x00) {
+        return true;
+    }
     return memcmp(data, kEHOME_MAGIC, sizeof(kEHOME_MAGIC) - 1) == 0;
 }
 
