@@ -47,39 +47,39 @@ WORKDIR /opt/media/ZLMediaKit/build
 RUN cmake -DCMAKE_BUILD_TYPE=${MODEL} -DENABLE_WEBRTC=true -DENABLE_FFMPEG=true -DENABLE_TESTS=false -DENABLE_API=false .. && \
     make -j $(nproc)
 
-FROM ubuntu:18.04
-ARG MODEL
-
-# ADD sources.list /etc/apt/sources.list
-
-RUN apt-get update && \
-         DEBIAN_FRONTEND="noninteractive" \
-         apt-get install -y --no-install-recommends \
-         vim \
-         wget \
-         ca-certificates \
-         tzdata \
-         curl \
-         libssl-dev \
-         libx264-dev \
-         libfaac-dev \
-         ffmpeg \
-         gcc \
-         g++ \
-         libavcodec-dev libavutil-dev libswscale-dev libresample-dev \
-         gdb && \
-         apt-get autoremove -y && \
-         apt-get clean -y && \
-    rm -rf /var/lib/apt/lists/*
-
-ENV TZ=Asia/Shanghai
-RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
-        && echo $TZ > /etc/timezone && \
-        mkdir -p /opt/media/bin/www
-
-WORKDIR /opt/media/bin/
-COPY --from=build /opt/media/ZLMediaKit/release/linux/${MODEL}/MediaServer /opt/media/ZLMediaKit/default.pem /opt/media/bin/
-COPY --from=build /opt/media/ZLMediaKit/release/linux/${MODEL}/config.ini /opt/media/conf/
-COPY --from=build /opt/media/ZLMediaKit/www/ /opt/media/bin/www/
-ENV PATH /opt/media/bin:$PATH
-CMD ["sh","-c","./MediaServer -s default.pem -c ../conf/config.ini"]
+#FROM ubuntu:18.04
+#ARG MODEL
+#
+## ADD sources.list /etc/apt/sources.list
+#
+#RUN apt-get update && \
+#         DEBIAN_FRONTEND="noninteractive" \
+#         apt-get install -y --no-install-recommends \
+#         vim \
+#         wget \
+#         ca-certificates \
+#         tzdata \
+#         curl \
+#         libssl-dev \
+#         libx264-dev \
+#         libfaac-dev \
+#         ffmpeg \
+#         gcc \
+#         g++ \
+#         libavcodec-dev libavutil-dev libswscale-dev libresample-dev \
+#         gdb && \
+#         apt-get autoremove -y && \
+#         apt-get clean -y && \
+#    rm -rf /var/lib/apt/lists/*
+#
+#ENV TZ=Asia/Shanghai
+#RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
+#        && echo $TZ > /etc/timezone && \
+#        mkdir -p /opt/media/bin/www
+#
+#WORKDIR /opt/media/bin/
+#COPY --from=build /opt/media/ZLMediaKit/release/linux/${MODEL}/MediaServer /opt/media/ZLMediaKit/default.pem /opt/media/bin/
+#COPY --from=build /opt/media/ZLMediaKit/release/linux/${MODEL}/config.ini /opt/media/conf/
+#COPY --from=build /opt/media/ZLMediaKit/www/ /opt/media/bin/www/
+#ENV PATH /opt/media/bin:$PATH
+#CMD ["sh","-c","./MediaServer -s default.pem -c ../conf/config.ini"]
